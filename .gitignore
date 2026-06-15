@@ -1,0 +1,49 @@
+﻿# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large data
+data/raw/images/*
+data/raw/videos/*
+data/samples/*.jpg
+data/samples/*.png
+data/samples/*.mp4
+data/samples/*.avi
+data/building_dataset/images/train/*
+data/building_dataset/images/val/*
+data/building_dataset/labels/train/*
+data/building_dataset/labels/val/*
+
+# Models
+models/pc/*.pt
+models/jetson/*.onnx
+models/jetson/*.engine
+
+# Outputs
+outputs/pc/images/*
+outputs/pc/videos/*
+outputs/pc/logs/*
+outputs/jetson/images/*
+outputs/jetson/videos/*
+outputs/jetson/screenshots/*
+outputs/jetson/logs/*
+
+# Logs
+*.log
+
+# Keep empty folders
+!.gitkeep
+!**/.gitkeep

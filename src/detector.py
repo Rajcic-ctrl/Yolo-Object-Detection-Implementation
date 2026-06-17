@@ -9,6 +9,8 @@ class Detector:
         self.model_path = model_path
         self.confidence = confidence
         self.model = YOLO(model_path)
+        
+        self.target_class_ids = [0, 1, 2, 3, 5, 7]
 
     def detect_image(self, image_path: str, output_dir: str = "outputs/pc/images") -> Path:
         image_file = Path(image_path)
@@ -22,6 +24,7 @@ class Detector:
         results = self.model.predict(
             source=str(image_file),
             conf=self.confidence,
+            classes=self.target_class_ids,
             save=False,
             verbose=False
         )
@@ -33,3 +36,17 @@ class Detector:
         cv2.imwrite(str(output_path), annotated_image)
 
         return output_path
+    
+    def detect_frame(self, frame):
+        results = self.model.predict(
+            source=frame,
+            conf=self.confidence,
+            classes=self.target_class_ids,
+            save=False,
+            verbose=False
+        )
+
+        result = results[0]
+        annotated_frame = result.plot()
+
+        return annotated_frame

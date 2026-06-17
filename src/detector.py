@@ -12,7 +12,7 @@ class Detector:
         
         self.target_class_ids = [0, 1, 2, 3, 5, 7]
 
-    def detect_image(self, image_path: str, output_dir: str = "outputs/pc/images") -> Path:
+    def detect_image(self, image_path: str, output_dir: str = "outputs/pc/images") -> tuple[Path, dict[str, int]]:
         image_file = Path(image_path)
 
         if not image_file.exists():
@@ -35,7 +35,10 @@ class Detector:
         output_path = output_folder / f"detected_{image_file.stem}.jpg"
         cv2.imwrite(str(output_path), annotated_image)
 
-        return output_path
+        object_counts = self._count_objects(result)
+
+        return output_path, object_counts
+    
     
     def detect_frame(self, frame):
         results = self.model.predict(
@@ -48,5 +51,24 @@ class Detector:
 
         result = results[0]
         annotated_frame = result.plot()
+        object_counts = self._count_objects(result)
 
-        return annotated_frame
+        return annotated_frame, object_counts
+    
+    def _count_objects(self, result) -> dict[str, int]:
+        counts: dict[str, int] = {}
+
+        if result.boxes is None:
+            return counts
+
+        class_ids = result.boxes.cls.cpu().numpy().astype(int)
+
+        for class_id in class_ids:
+            class_name = result.names[class_id]
+
+            if class_name not in counts:
+                counts[class_name] = 0
+
+            counts[class_name] += 1
+
+        return counts

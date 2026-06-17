@@ -38,6 +38,16 @@ def parse_args():
 
     return parser.parse_args()
 
+def print_object_counts(title: str, object_counts: dict[str, int]):
+    print(title)
+
+    if not object_counts:
+        print("- No objects detected")
+        return
+
+    for class_name, count in object_counts.items():
+        print(f"- {class_name}: {count}")
+
 
 def main():
     args = parse_args()
@@ -48,13 +58,15 @@ def main():
     )
 
     if args.mode == "image":
-        output_path = detector.detect_image(args.source)
-        print(f"Detection completed. Output saved to: {output_path}")
+        output_path, object_counts = detector.detect_image(args.source)
+        print(f"Image detection completed. Output saved to: {output_path}")
+        print_object_counts("Detected objects:", object_counts)
         
     elif args.mode == "video":
         video_processor = VideoProcessor(detector)
-        output_path = video_processor.process_video(args.source)
+        output_path, max_object_counts = video_processor.process_video(args.source)
         print(f"Video detection completed. Output saved to: {output_path}")
+        print_object_counts("Maximum objects detected in a single frame:", max_object_counts)
 
 
 if __name__ == "__main__":

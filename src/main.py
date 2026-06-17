@@ -2,6 +2,7 @@
 
 from detector import Detector
 
+from video_processor import VideoProcessor
 
 def parse_args():
     parser = argparse.ArgumentParser(description="YOLOv8 Drone Object Detection")
@@ -10,7 +11,7 @@ def parse_args():
         "--source",
         type=str,
         default="data/samples/test_image.jpg",
-        help="Path to input image"
+        help="Path to input image or video"
     )
 
     parser.add_argument(
@@ -29,9 +30,9 @@ def parse_args():
 
     parser.add_argument(
         "--mode",
+        choices=["image", "video"],
         type=str,
         default="image",
-        choices=["image"],
         help="Detection mode"
     )
 
@@ -49,6 +50,11 @@ def main():
     if args.mode == "image":
         output_path = detector.detect_image(args.source)
         print(f"Detection completed. Output saved to: {output_path}")
+        
+    elif args.mode == "video":
+        video_processor = VideoProcessor(detector)
+        output_path = video_processor.process_video(args.source)
+        print(f"Video detection completed. Output saved to: {output_path}")
 
 
 if __name__ == "__main__":

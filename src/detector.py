@@ -3,6 +3,7 @@
 import cv2
 from ultralytics import YOLO
 
+from visualizer import draw_counts_overlay
 
 class Detector:
     def __init__(self, model_path: str = "yolov8n.pt", confidence: float = 0.4):
@@ -28,14 +29,18 @@ class Detector:
             save=False,
             verbose=False
         )
-
         result = results[0]
+
+        object_counts = self._count_objects(result)
+        
+        
         annotated_image = result.plot()
+        annotated_image = draw_counts_overlay(annotated_image, object_counts)
 
         output_path = output_folder / f"detected_{image_file.stem}.jpg"
         cv2.imwrite(str(output_path), annotated_image)
 
-        object_counts = self._count_objects(result)
+        
 
         return output_path, object_counts
     
@@ -50,8 +55,12 @@ class Detector:
         )
 
         result = results[0]
-        annotated_frame = result.plot()
+        
         object_counts = self._count_objects(result)
+        
+        annotated_frame = result.plot()
+        annotated_frame = draw_counts_overlay(annotated_frame, object_counts)
+        
 
         return annotated_frame, object_counts
     

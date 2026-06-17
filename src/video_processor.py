@@ -12,7 +12,7 @@ class VideoProcessor:
         self,
         video_path: str,
         output_dir: str = "outputs/pc/videos"
-    ) -> Path:
+    ) -> tuple[Path, dict[str, int]]:
         video_file = Path(video_path)
 
         if not video_file.exists():
@@ -42,17 +42,26 @@ class VideoProcessor:
             fps,
             (width, height)
         )
+        
+        max_object_counts: dict[str, int] = {}
 
         while True:
             success, frame = capture.read()
 
             if not success:
                 break
+            
+            annotated_frame, frame_counts = self.detector.detect_frame(frame)
 
-            annotated_frame = self.detector.detect_frame(frame)
+            for class_name, count in frame_counts.items():
+                previous_max = max_object_counts.get(class_name, 0)
+
+                if count > previous_max:
+                    max_object_counts[class_name] = count
+
             writer.write(annotated_frame)
 
         capture.release()
         writer.release()
 
-        return output_path
+        return output_path, max_object_counts

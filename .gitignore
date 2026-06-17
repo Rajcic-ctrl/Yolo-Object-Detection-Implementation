@@ -47,3 +47,8 @@ outputs/jetson/logs/*
 # Keep empty folders
 !.gitkeep
 !**/.gitkeep
+
+# YOLO model files
+*.pt
+*.onnx
+*.engine

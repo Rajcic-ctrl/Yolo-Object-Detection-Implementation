@@ -2,7 +2,7 @@
 
 import cv2
 from ultralytics import YOLO
-
+import time
 from visualizer import draw_counts_overlay
 
 class Detector:
@@ -13,7 +13,7 @@ class Detector:
         
         self.target_class_ids = [0, 1, 2, 3, 5, 7]
 
-    def detect_image(self, image_path: str, output_dir: str = "outputs/pc/images") -> tuple[Path, dict[str, int]]:
+    def detect_image(self, image_path: str, output_dir: str = "outputs/pc/images") -> tuple[Path, dict[str, int], float]:
         image_file = Path(image_path)
 
         if not image_file.exists():
@@ -22,6 +22,8 @@ class Detector:
         output_folder = Path(output_dir)
         output_folder.mkdir(parents=True, exist_ok=True)
 
+        start_time = time.perf_counter()
+
         results = self.model.predict(
             source=str(image_file),
             conf=self.confidence,
@@ -29,6 +31,11 @@ class Detector:
             save=False,
             verbose=False
         )
+        
+        end_time = time.perf_counter()
+        
+        inference_time_ms = (end_time - start_time) * 1000
+        
         result = results[0]
 
         object_counts = self._count_objects(result)
@@ -42,10 +49,13 @@ class Detector:
 
         
 
-        return output_path, object_counts
+        return output_path, object_counts, inference_time_ms
     
     
     def detect_frame(self, frame):
+        
+        start_time = time.perf_counter()
+        
         results = self.model.predict(
             source=frame,
             conf=self.confidence,
@@ -53,6 +63,9 @@ class Detector:
             save=False,
             verbose=False
         )
+        
+        end_time = time.perf_counter()
+        inference_time_ms = (end_time - start_time) * 1000
 
         result = results[0]
         
@@ -62,7 +75,7 @@ class Detector:
         annotated_frame = draw_counts_overlay(annotated_frame, object_counts)
         
 
-        return annotated_frame, object_counts
+        return annotated_frame, object_counts, inference_time_ms
     
     def _count_objects(self, result) -> dict[str, int]:
         counts: dict[str, int] = {}
@@ -81,3 +94,7 @@ class Detector:
             counts[class_name] += 1
 
         return counts
+    
+    
+    
+    

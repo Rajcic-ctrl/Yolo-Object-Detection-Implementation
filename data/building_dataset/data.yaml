@@ -1,4 +1,4 @@
-﻿path: ./data/building_dataset
+﻿path: data/building_dataset
 train: images/train
 val: images/val
 

@@ -1,6 +1,5 @@
 ﻿# Python
-
-**pycache**/
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
@@ -9,30 +8,27 @@ venv/
 env/
 
 # IDE
-
 .vscode/
 .idea/
 
 # OS
-
 .DS_Store
 Thumbs.db
 
 # Raw datasets
-
 data/raw/**
 
 # Generated / converted datasets
-
 data/visdrone_yolo/**
 data/visdrone_yolo_*/**
-data/building_dataset/images/train/**
-data/building_dataset/images/val/**
-data/building_dataset/labels/train/**
-data/building_dataset/labels/val/**
+
+# Building datasets - ignore images and labels, keep data.yaml files
+data/building_dataset/images/**
+data/building_dataset/labels/**
+data/building_detection_yolo/images/**
+data/building_detection_yolo/labels/**
 
 # Sample/generated media
-
 data/samples/*.jpg
 data/samples/*.png
 data/samples/*.mp4
@@ -40,29 +36,27 @@ data/samples/*.avi
 data/samples/*.mov
 
 # Training runs
-
 runs/**
 
 # Outputs
-
 outputs/**
 
 # Logs
-
 *.log
 
 # Model artifacts
-
 *.pt
 *.onnx
 *.engine
 
 # Allow final committed drone models
-
 !models/pc/yolov8n_drone.pt
 !models/jetson/yolov8n_drone.onnx
 
-# Keep empty folders
+# Allow final committed building models
+!models/pc/yolov8n_building.pt
+!models/jetson/yolov8n_building.onnx
 
+# Keep empty folders
 !.gitkeep
 !**/.gitkeep

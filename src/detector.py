@@ -6,12 +6,16 @@ import time
 from visualizer import draw_counts_overlay
 
 class Detector:
-    def __init__(self, model_path: str = "yolov8n.pt", confidence: float = 0.4):
+    def __init__(self, model_path: str = "yolov8n.pt", confidence: float = 0.4, use_coco_filter: bool = True):
         self.model_path = model_path
         self.confidence = confidence
         self.model = YOLO(model_path)
         
-        self.target_class_ids = [0, 1, 2, 3, 5, 7]
+        
+        if use_coco_filter:
+            self.target_class_ids = [0, 1, 2, 3, 5, 7]
+        else:
+            self.target_class_ids = None
 
     def detect_image(self, image_path: str, output_dir: str = "outputs/pc/images") -> tuple[Path, dict[str, int], float]:
         image_file = Path(image_path)

@@ -55,10 +55,10 @@ class VideoProcessor:
             if not success:
                 break
             
-            annotated_frame, frame_counts, total_inference_time_ms = self.detector.detect_frame(frame)
+            annotated_frame, frame_counts, frame_inference_time_ms = self.detector.detect_frame(frame)
             
             processed_frames += 1
-            total_inference_time_ms += total_inference_time_ms
+            total_inference_time_ms += frame_inference_time_ms
             
             for class_name, count in frame_counts.items():
                 previous_max = max_object_counts.get(class_name, 0)

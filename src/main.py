@@ -35,6 +35,12 @@ def parse_args():
         default="image",
         help="Detection mode"
     )
+    
+    parser.add_argument(
+        "--no-class-filter",
+        action="store_true",
+        help="Disable COCO filtering for custom models"
+    )
 
     return parser.parse_args()
 
@@ -62,7 +68,8 @@ def main():
 
     detector = Detector(
         model_path=args.model,
-        confidence=args.conf
+        confidence=args.conf,
+        use_coco_filter=not args.no_class_filter
     )
 
     if args.mode == "image":

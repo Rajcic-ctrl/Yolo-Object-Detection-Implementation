@@ -26,6 +26,9 @@ data/building_dataset/images/train/*
 data/building_dataset/images/val/*
 data/building_dataset/labels/train/*
 data/building_dataset/labels/val/*
+data/raw/**
+data/visdrone_yolo/**
+
 
 # Models
 models/pc/*.pt

@@ -15,43 +15,41 @@ env/
 .DS_Store
 Thumbs.db
 
-# Large data
-data/raw/images/*
-data/raw/videos/*
+# Raw datasets
+data/raw/**
+
+# Generated / converted datasets
+data/visdrone_yolo/**
+data/visdrone_yolo_*/**
+data/building_dataset/images/train/**
+data/building_dataset/images/val/**
+data/building_dataset/labels/train/**
+data/building_dataset/labels/val/**
+
+# Sample/generated media
 data/samples/*.jpg
 data/samples/*.png
 data/samples/*.mp4
 data/samples/*.avi
-data/building_dataset/images/train/*
-data/building_dataset/images/val/*
-data/building_dataset/labels/train/*
-data/building_dataset/labels/val/*
-data/raw/**
-data/visdrone_yolo/**
+data/samples/*.mov
 
-
-# Models
-models/pc/*.pt
-models/jetson/*.onnx
-models/jetson/*.engine
+# Training runs
+runs/**
 
 # Outputs
-outputs/pc/images/*
-outputs/pc/videos/*
-outputs/pc/logs/*
-outputs/jetson/images/*
-outputs/jetson/videos/*
-outputs/jetson/screenshots/*
-outputs/jetson/logs/*
+outputs/**
 
 # Logs
 *.log
 
-# Keep empty folders
-!.gitkeep
-!**/.gitkeep
-
-# YOLO model files
+# Model artifacts
 *.pt
 *.onnx
 *.engine
+
+# Allow final drone model to be committed
+!models/pc/yolov8n_drone.pt
+
+# Keep empty folders
+!.gitkeep
+!**/.gitkeep
